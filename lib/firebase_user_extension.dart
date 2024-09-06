@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:game_services_firebase_auth/firebase_auth_extension.dart';
 import 'package:game_services_firebase_auth/game_services_credentials_utils.dart';
 
 // Extending the [User] class from Firebase to add functionality for linking and managing
@@ -19,22 +20,28 @@ extension FirebaseUserExtension on User {
     String? playGamesClientId,
     bool forceSignInIfCredentialAlreadyUsed = false,
   }) async {
-    // For Android, retrieve Play Games credentials and link them to Firebase.
-    if (Platform.isAndroid) {
-      return linkWithCredential(
-        await GameServicesCredentialsUtils.getPlayGamesCredential(playGamesClientId: playGamesClientId),
-      );
+    try {
+      // For Android, retrieve Play Games credentials and link them to Firebase.
+      if (Platform.isAndroid) {
+        return await linkWithCredential(
+          await GameServicesCredentialsUtils.getPlayGamesCredential(playGamesClientId: playGamesClientId),
+        );
+      }
+      // For iOS, retrieve Game Center credentials and link them to Firebase.
+      if (Platform.isIOS) {
+        return await linkWithCredential(
+          await GameServicesCredentialsUtils.getGameCenterCredential(),
+        );
+      }
+      // If the platform is neither Android nor iOS, throw an error indicating unsupported platform.
+      throw UnimplementedError('Platform not supported.');
+    } on FirebaseAuthException catch (e) {
+      if (forceSignInIfCredentialAlreadyUsed && e.code == 'credential-already-in-use') {
+        await FirebaseAuth.instance.signOut();
+        return FirebaseAuth.instance.signInWithGamesServices(playGamesClientId: playGamesClientId);
+      }
+      rethrow;
     }
-    // For iOS, retrieve Game Center credentials and link them to Firebase.
-    if (Platform.isIOS) {
-      return linkWithCredential(
-        await GameServicesCredentialsUtils.getGameCenterCredential(),
-      );
-    }
-    // If the platform is neither Android nor iOS, throw an error indicating unsupported platform.
-    throw UnimplementedError('Platform not supported.');
-
-    // TODO forceSignInIfCredentialAlreadyUsed
   }
 
   /// Checks if the currently signed-in Firebase user is linked with Play Games
