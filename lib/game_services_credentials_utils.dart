@@ -2,64 +2,80 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:game_services_firebase_auth/game_services_firebase_auth.dart';
 import 'package:game_services_firebase_auth/game_services_firebase_auth_exception.dart';
 
-/// A utility class that provides methods for retrieving authentication credentials
-/// for Play Games (Android) and Game Center (iOS).
-///
-/// This class interacts with the Game Services authentication system to fetch OAuth credentials
-/// that can be used with Firebase Authentication.
+/// A utility class to retrieve OAuth credentials for Play Games (Android) and Game Center (iOS),
+/// which can be used to authenticate with Firebase.
 class GameServicesCredentialsUtils {
-  /// Retrieves an OAuthCredential for Play Games (Android).
+  /// Retrieves an [OAuthCredential] for Play Games (Android).
   ///
-  /// This method signs the user into Play Games and retrieves an authentication code,
-  /// which is then used to create a Firebase OAuth credential.
+  /// This method interacts with the Play Games services to sign in the user and retrieve an
+  /// authentication code (`serverAuthCode`). If successful, it generates a Firebase OAuth
+  /// credential from the auth code.
   ///
-  /// Throws a [GameServicesFirebaseAuthException] if the sign-in process fails, indicating
-  /// that the user is not signed into Play Games.
+  /// [playGamesClientId] is an optional parameter that specifies the Play Games client ID.
+  /// If not provided, the default configuration is used.
   ///
-  /// Returns an [OAuthCredential] that can be used with Firebase for authenticating the user.
+  /// Throws:
+  /// - [GameServicesFirebaseAuthException] if the sign-in process fails or the user is not signed in.
+  ///
+  /// Returns an [OAuthCredential] that can be used with Firebase for user authentication.
   static Future<OAuthCredential> getPlayGamesCredential({String? playGamesClientId}) async {
-    // Attempts to sign in with Play Games and retrieve an auth code.
-    final String? authCode =
-        await GameServicesFirebaseAuth().signInWithGameService(playGamesClientId: playGamesClientId);
+    // Attempt to sign in with Play Games.
+    final bool success = await GameServicesFirebaseAuth().signInWithGameService(playGamesClientId: playGamesClientId);
 
-    // If the auth code is null, throw an exception indicating the failure.
-    if (authCode == null) {
+    // If sign-in fails, throw an exception.
+    if (!success) {
       throw GameServicesFirebaseAuthException(
         code: GameServicesFirebaseExceptionCode.notSignedIntoGamesServices,
         message: 'Failed to sign into Play Games. Please check your Play Games settings and try again.',
       );
     }
 
-    // Returns a Firebase OAuth credential using the retrieved serverAuthCode from Play Games.
+    // Retrieve the authentication code from Play Games.
+    final String? authCode =
+        await GameServicesFirebaseAuth().getAndroidServerAuthCode(playGamesClientId: playGamesClientId);
+
+    // If the auth code is null, throw an exception.
+    if (authCode == null) {
+      throw GameServicesFirebaseAuthException(
+        code: GameServicesFirebaseExceptionCode.notSignedIntoGamesServices,
+        message: 'Failed to retrieve auth code from Play Games. Please check your Play Games settings and try again.',
+      );
+    }
+
+    // Return a Firebase OAuth credential using the retrieved serverAuthCode.
     return PlayGamesAuthProvider.credential(serverAuthCode: authCode);
   }
 
-  /// Retrieves an OAuthCredential for Game Center (iOS).
+  /// Retrieves an [OAuthCredential] for Game Center (iOS).
   ///
-  /// This method first checks if the user is already signed into Game Center.
-  /// If not, it attempts to sign in and retrieve an auth token.
-  /// If the sign-in fails, an exception is thrown.
+  /// This method checks if the user is already signed into Game Center. If the user is
+  /// not signed in, it attempts to sign them in and generate an OAuth token.
   ///
-  /// Throws a [GameServicesFirebaseAuthException] if the sign-in process fails.
+  /// Throws:
+  /// - [GameServicesFirebaseAuthException] if the sign-in process fails or the user is not signed in.
   ///
-  /// Returns an [OAuthCredential] for Game Center, which can be used with Firebase.
+  /// Returns an [OAuthCredential] that can be used with Firebase to authenticate the user.
   static Future<OAuthCredential> getGameCenterCredential() async {
-    // Checks if the user is already signed into Game Center.
-    if (await GameServicesFirebaseAuth().isAlreadySignInWithGameService()) {
-      // If already signed in, return the Game Center credential.
+    // Check if the user is already signed into Game Center.
+    final bool alreadySignedIn = await GameServicesFirebaseAuth().isAlreadySignInWithGameService();
+
+    if (alreadySignedIn) {
+      // Return the Game Center OAuth credential if already signed in.
       return GameCenterAuthProvider.credential();
     }
 
-    // Attempts to sign in with Game Center and retrieve the auth token.
-    if ((await GameServicesFirebaseAuth().signInWithGameService()) == null) {
-      // If the auth token is null, throw an exception indicating the failure.
+    // Attempt to sign in with Game Center.
+    final bool signInSuccess = await GameServicesFirebaseAuth().signInWithGameService();
+
+    // If sign-in fails, throw an exception.
+    if (!signInSuccess) {
       throw GameServicesFirebaseAuthException(
         code: GameServicesFirebaseExceptionCode.notSignedIntoGamesServices,
         message: 'Failed to sign into Game Center. Please check your Game Center settings and try again.',
       );
     }
 
-    // If successful, return the Game Center credential for Firebase.
+    // Return the Game Center credential for Firebase after successful sign-in.
     return GameCenterAuthProvider.credential();
   }
 }

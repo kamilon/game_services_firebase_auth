@@ -74,7 +74,8 @@ class _MyAppState extends State<MyApp> {
                       child: Text('Link credentials with OS Game service'),
                     ),
                     TextButton(
-                      onPressed: () => _user!.linkWithGamesServices(forceSignInIfCredentialAlreadyUsed: true),
+                      onPressed: () =>
+                          _user!.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true),
                       child: Text('Link credentials with OS Game service (Forced)'),
                     ),
                   ],
