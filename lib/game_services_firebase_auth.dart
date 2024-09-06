@@ -1,93 +1,53 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:game_services_firebase_auth/game_service_firebase_exception.dart';
+import 'game_services_firebase_auth_platform_interface.dart';
+import 'logging.dart';
 
+/// A singleton class that provides the primary interface for interacting with
+/// Game Services authentication (Play Games on Android and GameCenter on iOS).
+///
+/// This class serves as the entry point for the authentication methods, allowing
+/// developers to sign in with the native game services or check if the user is already signed in.
 class GameServicesFirebaseAuth {
-  static const MethodChannel _channel = const MethodChannel('game_services_firebase_auth');
+  // Singleton instance of GameServicesFirebaseAuth.
+  static final GameServicesFirebaseAuth _instance = GameServicesFirebaseAuth._internal();
 
-  /// Try to sign in with native Game Service (Play Games on Android and GameCenter on iOS)
-  /// Return `true` if success
-  /// [clientId] is only for Android if you want to provide a clientId other than the main one in you google-services.json
-  static Future<bool> signInWithGameService({String? clientId}) async {
-    try {
-      final dynamic result = await _channel.invokeMethod('sign_in_with_game_service', {'client_id': clientId});
+  // Private internal constructor to prevent external instantiation.
+  GameServicesFirebaseAuth._internal();
 
-      if (result is bool) {
-        return result;
-      } else {
-        return false;
-      }
-    } on PlatformException catch (error) {
-      String code = 'unknown';
-
-      switch (error.code) {
-        case 'ERROR_CREDENTIAL_ALREADY_IN_USE':
-          code = 'credential_already_in_use';
-          break;
-        case 'get_gamecenter_credentials_failed':
-        case 'no_player_detected':
-        case '12501':
-          code = 'game_service_badly_configured_user_side';
-          break;
-      }
-      throw GameServiceFirebaseAuthException(code: code, message: error.message, stackTrace: error.stacktrace);
-    } catch (error) {
-      throw GameServiceFirebaseAuthException(message: error.toString());
-    }
+  /// Factory constructor that returns the singleton instance of GameServicesFirebaseAuth.
+  ///
+  /// This ensures that there is only one instance of the class throughout the app.
+  factory GameServicesFirebaseAuth() {
+    return _instance;
   }
 
-  /// Try to sign link current user with native Game Service (Play Games on Android and GameCenter on iOS)
-  /// Return `true` if success
-  /// [clientId] is only for Android if you want to provide a clientId other than the main one in you google-services.json
-  /// [forceSignInIfCredentialAlreadyUsed] make user force sign in with game services link failed because of ERROR_CREDENTIAL_ALREADY_IN_USE
-  static Future<bool> linkGameServicesCredentialsToCurrentUser(
-      {String? clientId, bool forceSignInIfCredentialAlreadyUsed = false}) async {
-    try {
-      final dynamic result = await _channel.invokeMethod('link_game_services_credentials_to_current_user', {
-        'client_id': clientId,
-        'force_sign_in_credential_already_used': forceSignInIfCredentialAlreadyUsed,
-      });
-
-      if (result is bool) {
-        return result;
-      } else {
-        return false;
-      }
-    } on PlatformException catch (error) {
-      String code = 'unknown';
-
-      switch (error.code) {
-        case 'ERROR_CREDENTIAL_ALREADY_IN_USE':
-          code = 'credential_already_in_use';
-          break;
-        case 'get_gamecenter_credentials_failed':
-        case 'no_player_detected':
-        case '12501':
-          code = 'game_service_badly_configured_user_side';
-          break;
-      }
-      throw GameServiceFirebaseAuthException(code: code, message: error.message, stackTrace: error.stacktrace);
-    } catch (error) {
-      throw GameServiceFirebaseAuthException(message: error.toString());
-    }
+  /// Enables or disables debug logging for the Game Services authentication.
+  ///
+  /// If [enabled] is `true`, detailed logs will be printed to help with debugging.
+  /// The logging functionality is controlled by the `setLogging` method.
+  void enableDebugLogging(bool enabled) {
+    setLogging(enabled: enabled);
   }
 
-  /// Test if a user is already linked to a game service
-  /// Advised to be call before linkGameServicesCredentialsToCurrentUser()
-  static bool isUserLinkedToGameService() {
-    final user = FirebaseAuth.instance.currentUser;
+  /// Attempts to sign in with the native Game Service (Play Games for Android and GameCenter for iOS).
+  ///
+  /// Returns a [Future] that completes with the authentication token if the sign-in is successful.
+  /// If the sign-in fails, the returned value will be `null`.
+  ///
+  /// This method utilizes the platform-specific implementation to handle sign-in.
+  Future<String?> signInWithGameService({String? playGamesClientId}) {
+    return GameServicesFirebaseAuthPlatform.instance.signInWithGameService(playGamesClientId: playGamesClientId);
+  }
 
-    if (user == null) {
-      throw Exception('Firebase user is null');
-    }
-
-    final isLinked = user.providerData
-        .map((userInfo) => userInfo.providerId)
-        .contains(Platform.isIOS ? 'gc.apple.com' : 'playgames.google.com');
-
-    return isLinked;
+  /// Checks whether the user is already signed in with the native Game Service.
+  ///
+  /// Returns a [Future] that completes with `true` if the user is already signed in,
+  /// or `false` if they are not.
+  ///
+  /// This is useful for determining if the sign-in process is necessary or if the user
+  /// is already authenticated.
+  Future<bool> isAlreadySignInWithGameService() {
+    return GameServicesFirebaseAuthPlatform.instance.isAlreadySignInWithGameService();
   }
 }

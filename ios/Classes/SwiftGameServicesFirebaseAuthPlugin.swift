@@ -12,6 +12,12 @@ public class SwiftGameServicesFirebaseAuthPlugin: NSObject, FlutterPlugin {
         return UIApplication.shared.windows.first!.rootViewController!
     }
     
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "game_services_firebase_auth", binaryMessenger: registrar.messenger())
+        let instance = SwiftGameServicesFirebaseAuthPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
+    }
+    
     private func getCredentialsAndSignIn(result: @escaping (Bool, FlutterError?) -> Void) {
         GameCenterAuthProvider.getCredential { cred, error in
             
@@ -184,11 +190,7 @@ public class SwiftGameServicesFirebaseAuthPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "game_services_firebase_auth", binaryMessenger: registrar.messenger())
-        let instance = SwiftGameServicesFirebaseAuthPlugin()
-        registrar.addMethodCallDelegate(instance, channel: channel)
-    }
+   
     
     private func log(message: StaticString) {
         if #available(iOS 10.0, *) {
