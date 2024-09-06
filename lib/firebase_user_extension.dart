@@ -15,7 +15,10 @@ extension FirebaseUserExtension on User {
   /// Throws [UnimplementedError] if this method is called on unsupported platforms (non-Android, non-iOS).
   /// Throws [FirebaseAuthGamesServicesException] if authentication with game services fails.
   /// Throws [FirebaseAuthException] if linking with Firebase fails (e.g., due to network issues or invalid credentials).
-  Future<UserCredential> linkWithGamesServices({String? playGamesClientId}) async {
+  Future<UserCredential> linkWithGamesServices({
+    String? playGamesClientId,
+    bool forceSignInIfCredentialAlreadyUsed = false,
+  }) async {
     // For Android, retrieve Play Games credentials and link them to Firebase.
     if (Platform.isAndroid) {
       return linkWithCredential(
@@ -30,6 +33,8 @@ extension FirebaseUserExtension on User {
     }
     // If the platform is neither Android nor iOS, throw an error indicating unsupported platform.
     throw UnimplementedError('Platform not supported.');
+
+    // TODO forceSignInIfCredentialAlreadyUsed
   }
 
   /// Checks if the currently signed-in Firebase user is linked with Play Games

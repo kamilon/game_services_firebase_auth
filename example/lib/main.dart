@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:game_services_firebase_auth/firebase_auth_extension.dart';
+import 'package:game_services_firebase_auth/firebase_user_extension.dart';
 import 'package:game_services_firebase_auth/game_services_firebase_auth.dart';
 
 void main() async {
@@ -24,6 +26,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    GameServicesFirebaseAuth().enableDebugLogging(true);
     _listenAuthState();
   }
 
@@ -49,17 +52,15 @@ class _MyAppState extends State<MyApp> {
             if (_user == null) ...[
               TextButton(
                 onPressed: () => FirebaseAuth.instance.signInAnonymously(),
-                child: Text('Sign in Anonimously'),
-              ),
-              TextButton(
-                onPressed: () => FirebaseAuth.instance
-                    .createUserWithEmailAndPassword(
-                        email: 'test@test.fr', password: 'salut123'),
-                child: Text('Sign in random mail'),
+                child: Text('Sign in Anonymously'),
               ),
               TextButton(
                 onPressed: () =>
-                    GameServicesFirebaseAuth.signInWithGameService(),
+                    FirebaseAuth.instance.createUserWithEmailAndPassword(email: 'test@test.fr', password: 'salut123'),
+                child: Text('Sign in random mail'),
+              ),
+              TextButton(
+                onPressed: () => FirebaseAuth.instance.signInWithGamesServices(),
                 child: Text('Sign in with OS Game service'),
               ),
             ],
@@ -67,28 +68,21 @@ class _MyAppState extends State<MyApp> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (_user != null) ...[
-                  if (!GameServicesFirebaseAuth
-                      .isUserLinkedToGameService()) ...[
+                  if (!_user!.isLinkedWithGamesServices()) ...[
                     TextButton(
-                      onPressed: () => GameServicesFirebaseAuth
-                          .linkGameServicesCredentialsToCurrentUser(),
+                      onPressed: () => _user!.linkWithGamesServices(),
                       child: Text('Link credentials with OS Game service'),
                     ),
                     TextButton(
-                      onPressed: () => GameServicesFirebaseAuth
-                          .linkGameServicesCredentialsToCurrentUser(
-                              forceSignInIfCredentialAlreadyUsed: true),
-                      child: Text(
-                          'Link credentials with OS Game service (Forced)'),
+                      onPressed: () => _user!.linkWithGamesServices(forceSignInIfCredentialAlreadyUsed: true),
+                      child: Text('Link credentials with OS Game service (Forced)'),
                     ),
                   ],
                   Text('Name: ${_user?.displayName}'),
                   Text('Email: ${_user?.email}'),
                   Text('UID: ${_user?.uid}'),
-                  Text(
-                      'Providers: ${_user?.providerData.map((e) => e.providerId)}'),
-                  Text(
-                      'Is linked with GameServices: ${GameServicesFirebaseAuth.isUserLinkedToGameService()}'),
+                  Text('Providers: ${_user?.providerData.map((e) => e.providerId)}'),
+                  Text('Is linked with GameServices: ${_user!.isLinkedWithGamesServices()}'),
                   TextButton(
                     onPressed: () => FirebaseAuth.instance.signOut(),
                     child: Text('Logout'),

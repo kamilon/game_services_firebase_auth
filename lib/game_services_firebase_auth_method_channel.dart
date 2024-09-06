@@ -13,7 +13,7 @@ class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlat
   // Defines the method channel to communicate with the native platform (iOS/Android).
   // The channel name 'game_service_firebase_auth' must match with the native code.
   @visibleForTesting
-  final methodChannel = const MethodChannel('game_service_firebase_auth');
+  final methodChannel = const MethodChannel('game_services_firebase_auth');
 
   @override
   Future<String?> signInWithGameService({String? playGamesClientId}) async {
