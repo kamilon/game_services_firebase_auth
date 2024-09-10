@@ -32,10 +32,10 @@ Android, which can be a bit tricky and may lead to ambiguous errors if not set u
 
 ### 🍏 iOS
 
-1. Open your project in Xcode. In the Signing & Capabilities tab, add the ‘Game Center’ capability [(Doc here)](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center/)
-2. Ensure to activate the Game Center Authentication method in the Firebase Console.
+1. Make sure you have well configure Firebase in your Flutter project. [(Doc here)](https://firebase.google.com/docs/flutter/setup?platform=ios)
+2. Open your project in Xcode. In the Signing & Capabilities tab, add the ‘Game Center’ capability [(Doc here)](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center/)
+3. Ensure to activate the Game Center Authentication method in the Firebase Console.
 ![Firebase Activate Game Center](./blob/firebase_activate_game_center.png)
-
 
 ## Usage
 
