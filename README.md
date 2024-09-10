@@ -39,13 +39,13 @@ firebaseUser.isLinkedWithGamesServices();
 ### Link Firebase User with Game Services
 
 ```dart
-firebaseUser.linkWithGamesServices();
+await firebaseUser.linkWithGamesServices();
 ```
 
 ### Force Sign In with Game Services if Account Already Linked
 
 ```dart
-firebaseUser.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
+await firebaseUser.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
 ```
 
 ## Requirements
