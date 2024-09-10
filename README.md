@@ -30,11 +30,11 @@ Please follow the instructions carefully to set up your project for iOS and Andr
 Android, which can be a bit tricky and may lead to ambiguous errors if not set up correctly.
 
 
-### 🍏iOS
+### 🍏 iOS
 
 1. Open your project in Xcode. In the Signing & Capabilities tab, add the ‘Game Center’ capability [(Doc here)](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center/)
 2. Ensure to activate the Game Center Authentication method in the Firebase Console.
-   <img src="https://github.com/revoltgames/game_services_firebase_auth/blob/firebase_activate_game_center.png?raw=true" height="500"/>
+[Firebase Activate Game Center](./blob/firebase_activate_game_center.png)
 
 
 ## Usage
