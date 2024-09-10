@@ -1,48 +1,64 @@
-# 🎮 Game Services Firebase Auth
+# 🎮Game Services FirebaseAuth Plugin
 
-This plugin make some FirebaseAuth features available with GameCenter on iOS and PlayGames on Android
+A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS and Play Games on Android.
 
-## ⛏ Getting started
+## Features
 
-### 🤖 Android
+- **Cross-Platform Game Services**: Supports Firebase Authentication with GameCenter on iOS and Play Games on Android.
+- **Easy Integration**: Minimal code required to sign in, link accounts, and manage authentication with game services.
 
-• Configure your app for Firebase [(🔗 Doc link)](https://firebase.flutter.dev/docs/overview)
+## Installation
 
-• Configure you app for Play Games [(🔗 Doc link)](https://developers.google.com/games/services/console/enabling)
+To install the package, add the following to your `pubspec.yaml`:
 
-• Enjoy 🙌
-
-
-### 🍏 iOS
-• Configure your app for Firebase [(🔗 Doc link)](https://firebase.flutter.dev/docs/overview)
-
-• Configure you app for GameCenter [(🔗 Doc link)](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center)
-
-• Enjoy 🙌
-
-
-## 📋 Methods available
-
-### signInWithGameService
-
-```dart
-/// Try to sign in with native Game Service (Play Games on Android and GameCenter on iOS)
-/// Return `true` if success
-/// [clientId] is only for Android if you want to provide a clientId other than the main one in you google-services.json
-Future<bool> signInWithGameService({String? clientId})
+```yaml
+dependencies:
+  your_package_name: ^latest_version
 ```
 
-### linkGameServicesCredentialsToCurrentUser
+Then run:
 
-```dart
- /// Try to sign link current user with native Game Service (Play Games on Android and GameCenter on iOS)
-  /// Return `true` if success
-  /// [clientId] is only for Android if you want to provide a clientId other than the main one in you google-services.json
-  /// [forceSignInIfCredentialAlreadyUsed] make user force sign in with game services link failed because of ERROR_CREDENTIAL_ALREADY_IN_USE
-  static Future<bool> linkGameServicesCredentialsToCurrentUser({String? clientId, bool forceSignInIfCredentialAlreadyUsed = false})
+```bash
+flutter pub get
 ```
 
+## Usage
 
+### Sign In with Game Services
 
+```dart
+await FirebaseAuth.instance.signInWithGamesServices();
+```
+
+### Check if Current User is Linked with Game Services
+
+```dart
+firebaseUser.isLinkedWithGamesServices();
+```
+
+### Link Firebase User with Game Services
+
+```dart
+firebaseUser.linkWithGamesServices();
+```
+
+### Force Sign In with Game Services if Account Already Linked
+
+```dart
+_user.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
+```
+
+## Requirements
+
+- **Firebase Core**
+- **Firebase Auth**
+
+## Contributing
+
+Contributions are welcome! Please follow the [contribution guidelines](CONTRIBUTING.md) and basic open-source practices.
+
+## License
+
+This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for more details.
 
 
