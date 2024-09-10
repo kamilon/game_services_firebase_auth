@@ -1,4 +1,4 @@
-# 🎮Game Services FirebaseAuth Plugin
+# 🎮 Game Services FirebaseAuth Plugin
 
 A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS and Play Games on Android.
 
@@ -45,7 +45,7 @@ firebaseUser.linkWithGamesServices();
 ### Force Sign In with Game Services if Account Already Linked
 
 ```dart
-_user.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
+firebaseUser.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
 ```
 
 ## Requirements
