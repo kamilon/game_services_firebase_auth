@@ -11,16 +11,13 @@ class GameServicesCredentialsUtils {
   /// authentication code (`serverAuthCode`). If successful, it generates a Firebase OAuth
   /// credential from the auth code.
   ///
-  /// [playGamesClientId] is an optional parameter that specifies the Play Games client ID.
-  /// If not provided, the default configuration is used.
-  ///
   /// Throws:
   /// - [GameServicesFirebaseAuthException] if the sign-in process fails or the user is not signed in.
   ///
   /// Returns an [OAuthCredential] that can be used with Firebase for user authentication.
-  static Future<OAuthCredential> getPlayGamesCredential({String? playGamesClientId}) async {
+  static Future<OAuthCredential> getPlayGamesCredential() async {
     // Attempt to sign in with Play Games.
-    final bool success = await GameServicesFirebaseAuth().signInWithGameService(playGamesClientId: playGamesClientId);
+    final bool success = await GameServicesFirebaseAuth().signInWithGameService();
 
     // If sign-in fails, throw an exception.
     if (!success) {
@@ -31,8 +28,7 @@ class GameServicesCredentialsUtils {
     }
 
     // Retrieve the authentication code from Play Games.
-    final String? authCode =
-        await GameServicesFirebaseAuth().getAndroidServerAuthCode(playGamesClientId: playGamesClientId);
+    final String? authCode = await GameServicesFirebaseAuth().getAndroidServerAuthCode();
 
     // If the auth code is null, throw an exception.
     if (authCode == null) {

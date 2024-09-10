@@ -43,17 +43,14 @@ class GameServicesFirebaseAuth {
   ///
   /// If sign-in fails, the method returns `false`.
   ///
-  /// [playGamesClientId] is an optional parameter for providing a client ID for Play Games on Android.
-  /// This parameter is ignored on iOS.
-  ///
   /// Returns a [Future] that resolves with a `bool` indicating whether the sign-in was successful (`true`) or not (`false`).
   ///
   /// Example usage:
   /// ```dart
   /// final success = await GameServicesFirebaseAuth().signInWithGameService();
   /// ```
-  Future<bool> signInWithGameService({String? playGamesClientId}) {
-    return GameServicesFirebaseAuthPlatform.instance.signInWithGameService(playGamesClientId: playGamesClientId);
+  Future<bool> signInWithGameService() {
+    return GameServicesFirebaseAuthPlatform.instance.signInWithGameService();
   }
 
   /// Checks whether the user is already signed in with the native Game Service (Play Games on Android or Game Center on iOS).
@@ -77,8 +74,6 @@ class GameServicesFirebaseAuth {
   /// This method is only relevant on Android. It retrieves the server authentication code,
   /// which can be used for further authentication with Firebase or other services.
   ///
-  /// [playGamesClientId] is an optional parameter for specifying a custom Play Games client ID.
-  ///
   /// Returns a [Future] that resolves with the server authentication code as a [String],
   /// or `null` if the process fails.
   ///
@@ -86,7 +81,7 @@ class GameServicesFirebaseAuth {
   /// ```dart
   /// final authCode = await GameServicesFirebaseAuth().getAndroidServerAuthCode();
   /// ```
-  Future<String?> getAndroidServerAuthCode({String? playGamesClientId}) {
-    return GameServicesFirebaseAuthPlatform.instance.getAndroidServerAuthCode(playGamesClientId: playGamesClientId);
+  Future<String?> getAndroidServerAuthCode() {
+    return GameServicesFirebaseAuthPlatform.instance.getAndroidServerAuthCode();
   }
 }

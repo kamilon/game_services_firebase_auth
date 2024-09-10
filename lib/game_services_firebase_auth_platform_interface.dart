@@ -36,15 +36,11 @@ abstract class GameServicesFirebaseAuthPlatform extends PlatformInterface {
 
   /// Signs the user in with the platform's native game service.
   ///
-  /// - [playGamesClientId]: Optional parameter required for Android platforms, allowing
-  ///   the developer to specify a different client ID other than the one defined in
-  ///   `google-services.json`. This parameter is ignored on non-Android platforms.
-  ///
   /// Throws:
   /// - [UnimplementedError] if this method is not implemented by the platform-specific code.
   ///
   /// Returns a [Future] that completes with a [bool] indicating success (`true`) or failure (`false`).
-  Future<bool> signInWithGameService({String? playGamesClientId}) {
+  Future<bool> signInWithGameService() {
     throw UnimplementedError('signInWithGameService has not been implemented.');
   }
 
@@ -60,15 +56,12 @@ abstract class GameServicesFirebaseAuthPlatform extends PlatformInterface {
 
   /// Retrieves the Android server authentication code (for Play Games).
   ///
-  /// - [playGamesClientId]: Optional parameter to specify a different client ID
-  ///   on Android. This parameter is ignored on non-Android platforms.
-  ///
   /// Throws:
   /// - [UnimplementedError] if this method is not implemented by the platform-specific code.
   ///
   /// Returns a [Future] that completes with a [String?] representing the server authentication code,
   /// or `null` if the authentication code could not be retrieved.
-  Future<String?> getAndroidServerAuthCode({String? playGamesClientId}) {
+  Future<String?> getAndroidServerAuthCode() {
     throw UnimplementedError('getAndroidServerAuthCode has not been implemented.');
   }
 }

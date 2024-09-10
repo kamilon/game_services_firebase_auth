@@ -12,8 +12,7 @@ import 'game_services_credentials_utils.dart';
 extension FirebaseAuthExtension on FirebaseAuth {
   /// Signs the user in with Google Play Games (Android) or Game Center (iOS) via Firebase Authentication.
   ///
-  /// On Android, it fetches the Play Games credentials using the optional [playGamesClientId].
-  /// If no client ID is provided, the default configuration is used.
+  /// On Android, it fetches the Play Games credentials
   ///
   /// On iOS, it retrieves Game Center credentials to authenticate the user.
   ///
@@ -27,14 +26,10 @@ extension FirebaseAuthExtension on FirebaseAuth {
   /// ```dart
   /// final userCredential = await FirebaseAuth.instance.signInWithGamesServices();
   /// ```
-  ///
-  /// [playGamesClientId] is an optional parameter to specify the Play Games client ID on Android.
-  Future<UserCredential> signInWithGamesServices({String? playGamesClientId}) async {
+  Future<UserCredential> signInWithGamesServices() async {
     // Handle Android platform: Fetch Play Games credentials and sign in with Firebase.
     if (Platform.isAndroid) {
-      final playGamesCredential = await GameServicesCredentialsUtils.getPlayGamesCredential(
-        playGamesClientId: playGamesClientId,
-      );
+      final playGamesCredential = await GameServicesCredentialsUtils.getPlayGamesCredential();
       return signInWithCredential(playGamesCredential);
     }
 

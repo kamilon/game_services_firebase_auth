@@ -7,10 +7,14 @@ import 'package:game_services_firebase_auth/firebase_auth_extension.dart';
 import 'package:game_services_firebase_auth/firebase_user_extension.dart';
 import 'package:game_services_firebase_auth/game_services_firebase_auth.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 

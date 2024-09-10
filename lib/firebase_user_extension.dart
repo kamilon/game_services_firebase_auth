@@ -12,9 +12,6 @@ extension FirebaseUserExtension on User {
   /// This method fetches the appropriate game service credentials (either Play Games on Android
   /// or Game Center on iOS) and attempts to link them with the current Firebase user account.
   ///
-  /// [playGamesClientId] is an optional parameter that provides the Play Games client ID on Android.
-  /// If no client ID is provided, the default configuration is used.
-  ///
   /// [forceSignInWithGameServiceIfCredentialAlreadyUsed] indicates whether to force a sign-in
   /// with game services if the credentials are already linked with another account.
   /// If set to `true`, the user is signed out and signed in again using game services.
@@ -23,16 +20,11 @@ extension FirebaseUserExtension on User {
   /// - [UnimplementedError] for unsupported platforms (non-Android, non-iOS).
   /// - [FirebaseAuthGamesServicesException] if authentication with game services fails.
   /// - [FirebaseAuthException] if linking with Firebase fails (e.g., invalid credentials, network issues).
-  Future<UserCredential> linkWithGamesServices({
-    String? playGamesClientId,
-    bool forceSignInWithGameServiceIfCredentialAlreadyUsed = false,
-  }) async {
+  Future<UserCredential> linkWithGamesServices({bool forceSignInWithGameServiceIfCredentialAlreadyUsed = false}) async {
     try {
       // Handle linking on Android (Play Games).
       if (Platform.isAndroid) {
-        final playGamesCredential = await GameServicesCredentialsUtils.getPlayGamesCredential(
-          playGamesClientId: playGamesClientId,
-        );
+        final playGamesCredential = await GameServicesCredentialsUtils.getPlayGamesCredential();
         return await linkWithCredential(playGamesCredential);
       }
 
@@ -48,7 +40,7 @@ extension FirebaseUserExtension on User {
       // Handle the case where credentials are already linked with another account.
       if (forceSignInWithGameServiceIfCredentialAlreadyUsed && e.code == 'credential-already-in-use') {
         await FirebaseAuth.instance.signOut();
-        return FirebaseAuth.instance.signInWithGamesServices(playGamesClientId: playGamesClientId);
+        return FirebaseAuth.instance.signInWithGamesServices();
       }
       rethrow; // Re-throw the exception if not handled.
     }

@@ -20,21 +20,15 @@ class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlat
 
   /// Signs the user in with the platform's native game service.
   ///
-  /// - On Android, [playGamesClientId] can be used to specify a different client ID for Play Games.
-  /// - On iOS, this parameter is ignored.
-  ///
   /// Returns a [Future] that resolves with `true` if the sign-in is successful, or `false` otherwise.
   ///
   /// Logs any platform exceptions that occur during the sign-in process.
   @override
-  Future<bool> signInWithGameService({String? playGamesClientId}) async {
+  Future<bool> signInWithGameService() async {
     final bool? success;
     try {
       // Invoke the native method for signing in with the game service.
-      success = await methodChannel.invokeMethod<bool>('signInWithGameService', {
-            'playGamesClientId': playGamesClientId,
-          }) ??
-          false;
+      success = await methodChannel.invokeMethod<bool>('signInWithGameService') ?? false;
     } on PlatformException catch (e) {
       // Log the error if the platform throws an exception.
       _log.severe('Failed to sign in with Game Service: ${e.message}');
@@ -67,15 +61,12 @@ class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlat
 
   /// Retrieves the Android server authentication code for Play Games.
   ///
-  /// - [playGamesClientId] is an optional parameter to specify a different client ID on Android.
-  /// - This parameter is ignored on non-Android platforms.
-  ///
   /// Returns a [Future] that resolves with the server authentication code as a [String],
   /// or `null` if the process fails.
   ///
   /// Logs any platform exceptions that occur during the retrieval of the auth code.
   @override
-  Future<String?> getAndroidServerAuthCode({String? playGamesClientId}) async {
+  Future<String?> getAndroidServerAuthCode() async {
     final String? authCode;
     try {
       // Invoke the native method to get the Android server auth code.

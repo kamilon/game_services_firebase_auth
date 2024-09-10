@@ -1,6 +1,7 @@
 package io.revoltgames.game_services_firebase_auth
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.google.android.gms.games.AuthenticationResult
@@ -21,26 +22,136 @@ class MethodCallHandlerImpl(
     private var channel: MethodChannel =
         MethodChannel(binaryMessenger, "game_services_firebase_auth")
 
+    private var context: Context? = null;
+
     init {
         channel.setMethodCallHandler(this)
         PlayGamesSdk.initialize(activity)
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+
         when (call.method) {
-            "signInWithGameService" -> {
-                result.success("Android ${android.os.Build.VERSION.RELEASE}")
-            }
+            PluginConstants.METHOD_SIGN_IN_WITH_GAME_SERVICE -> signInWithGameService(call, result)
 
-            "isAlreadySignInWithGameService" -> getAuthCode(call, result)
+            PluginConstants.METHOD_IS_ALREADY_SIGN_IN_WITH_GAME_SERVICE -> isAlreadySignInWithGameService(
+                call,
+                result
+            )
 
-           "getAndroidServerAuthCode" -> signIn(call, result)
+            PluginConstants.METHOD_GET_ANDROID_SERVER_AUTH_CODE -> getAndroidServerAuthCode(
+                call,
+                result
+            )
 
             else -> result.notImplemented()
         }
     }
 
-    private fun getAuthCode(call: MethodCall, result: MethodChannel.Result) {
+    companion object {
+        @JvmStatic
+        fun getResourceFromContext(context: Context, resName: String): String {
+            val stringRes = context.resources.getIdentifier(resName, "string", context.packageName)
+            if (stringRes == 0) {
+                throw IllegalArgumentException(
+                    String.format(
+                        "The 'R.string.%s' value it's not defined in your project's resources file.",
+                        resName
+                    )
+                )
+            }
+            return context.getString(stringRes)
+        }
+
+    }
+
+    private fun signInWithGameService(call: MethodCall, result: MethodChannel.Result) {
+
+        val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
+
+        Log.i("[Game Services]", "signInWithGameService - Login requested")
+
+        val app: ApplicationInfo = activity.packageManager
+            .getApplicationInfo(activity.packageName, PackageManager.GET_META_DATA)
+
+        val projectId = app.metaData.getString("com.google.android.gms.games.APP_ID")
+
+        if(projectId == null) {
+            result.error(
+                "invalid-config",
+                "Using firebase_auth_games_services plugin requires a metadata tag with the name \"com.google.android.gms.games.APP_ID\" in the application tag of your manifest.",
+                null
+            )
+            return
+        }
+
+        gamesSignInClient.isAuthenticated()
+            .addOnCompleteListener CheckAuthentication@{ isAuthenticatedTask: Task<AuthenticationResult> ->
+                val isAuthenticated =
+                    (isAuthenticatedTask.isSuccessful &&
+                            isAuthenticatedTask.result.isAuthenticated)
+
+                if (isAuthenticated) {
+                    Log.i("[Game Services]", "signInWithGameService - Play Games sign-in succeeded")
+                    result.success(true)
+                    return@CheckAuthentication
+                }
+
+                Log.i("[Game Services]", "signInWithGameService - ${isAuthenticatedTask.isSuccessful} - ${isAuthenticatedTask.result.isAuthenticated}")
+
+                gamesSignInClient.signIn()
+                    .addOnCompleteListener SignIn@{ signInTask: Task<AuthenticationResult> ->
+
+                        val isSignedIn =
+                            (signInTask.isSuccessful &&
+                                    signInTask.result.isAuthenticated)
+
+                        Log.i("[Game Services]", "signInWithGameService - ${signInTask.isSuccessful} - ${signInTask.result.isAuthenticated}")
+
+                        if (!isSignedIn) {
+                            // Check for the error if the sign-in task failed
+                            if (signInTask.exception != null) {
+                                Log.e("[Game Services]", "signInWithGameService - Error during sign-in",
+                                    signInTask.exception!!
+                                )
+                            } else {
+                                Log.e("[Game Services]", "signInWithGameService - Unknown error occurred")
+                            }
+
+                            Log.i("[Game Services]", "signInWithGameService - Play Games sign-in failed")
+                            result.success(false)
+                            return@SignIn
+                        }
+
+                        Log.i(
+                            "[Game Services]",
+                            "signInWithGameService - Play Games sign-in succeed"
+                        )
+                        result.success(true)
+                        return@SignIn
+                    }
+            }
+
+    }
+
+    private fun isAlreadySignInWithGameService(call: MethodCall, result: MethodChannel.Result) {
+        val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
+
+        Log.i("[Game Services]", "signInWithGameService - Check if already authenticated")
+
+        gamesSignInClient.isAuthenticated()
+            .addOnCompleteListener CheckAuthentication@{ isAuthenticatedTask: Task<AuthenticationResult> ->
+
+                val isAuthenticated =
+                    (isAuthenticatedTask.isSuccessful &&
+                            isAuthenticatedTask.result.isAuthenticated)
+
+                result.success(isAuthenticated)
+            }
+
+    }
+
+    private fun getAndroidServerAuthCode(call: MethodCall, result: MethodChannel.Result) {
         val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
 
         gamesSignInClient.isAuthenticated()
@@ -48,21 +159,24 @@ class MethodCallHandlerImpl(
                 val isAuthenticated =
                     (isAuthenticatedTask.isSuccessful &&
                             isAuthenticatedTask.result.isAuthenticated)
-//                Log.i(
-//                    PluginConstants.PLUGIN_NAME,
-//                    "[${call.method}] Is authenticated=$isAuthenticated"
-//                )
+
 
                 if (!isAuthenticated) {
-                    result.success(null)
+                    result.error(
+                        "not_authenticated",
+                        "Your are not authenticated to Play Games, call signInWithGameService before",
+                        null
+                    )
                     return@AuthCheck
                 }
 
                 val app: ApplicationInfo = activity.packageManager
                     .getApplicationInfo(activity.packageName, PackageManager.GET_META_DATA)
+
                 val oAuthClientId = app.metaData.getString(
                     PluginConstants.OAUTH_2_CLIENT_ID_KEY
                 )
+
                 if (oAuthClientId == null) {
                     result.error(
                         "invalid-config",
@@ -77,10 +191,7 @@ class MethodCallHandlerImpl(
                     false
                 ).addOnCompleteListener GetAuthCode@{ authCodeTask: Task<String> ->
                     if (!authCodeTask.isSuccessful) {
-                        Log.i(
-                            PluginConstants.PLUGIN_NAME,
-                            "[${call.method}] GetAuthCode failed."
-                        )
+                        Log.i("[Game Services]", "getAndroidServerAuthCode - GetAuthCode failed")
                         result.success(null)
                         return@GetAuthCode
                     }
@@ -88,58 +199,28 @@ class MethodCallHandlerImpl(
                     val authCode = authCodeTask.result
                     if (authCode.isBlank()) {
                         Log.i(
-                            PluginConstants.PLUGIN_NAME,
-                            "[${call.method}] Received empty auth code."
+                            "[Game Services]",
+                            "getAndroidServerAuthCode - Received empty auth code"
                         )
                         result.success(null)
                         return@GetAuthCode
+                    } else {
+                        Log.i(
+                            "[Game Services]",
+                            "getAndroidServerAuthCode - Auth code=$authCode"
+                        )
                     }
 
-                    Log.i(
-                        PluginConstants.PLUGIN_NAME,
-                        "[${call.method}] Auth code=$authCode"
-                    )
                     result.success(authCode)
                 }
             }
     }
 
-    private fun signIn(call: MethodCall, result: MethodChannel.Result) {
-        val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
-
-        // Check if the user is already signed in.
-        gamesSignInClient.isAuthenticated()
-            .addOnCompleteListener AuthCheck@{ isAuthenticatedTask: Task<AuthenticationResult> ->
-                val isAuthenticated =
-                    (isAuthenticatedTask.isSuccessful &&
-                            isAuthenticatedTask.result.isAuthenticated)
-
-                if (isAuthenticated) {
-                    getAuthCode(call, result)
-                    return@AuthCheck
-                }
-
-                gamesSignInClient.signIn()
-                    .addOnCompleteListener SignIn@{ signInTask: Task<AuthenticationResult> ->
-                        val isSignedIn =
-                            (signInTask.isSuccessful &&
-                                    signInTask.result.isAuthenticated)
-                        Log.i(
-                            PluginConstants.PLUGIN_NAME,
-                            "[${call.method}] Is signed in=$isSignedIn"
-                        )
-
-                        if (!isSignedIn) {
-                            result.success(null)
-                            return@SignIn
-                        }
-
-                        getAuthCode(call, result)
-                    }
-            }
-    }
-
     fun stopListening() {
         channel.setMethodCallHandler(null)
+    }
+
+    fun setContext(newContext: Context) {
+        context = newContext
     }
 }

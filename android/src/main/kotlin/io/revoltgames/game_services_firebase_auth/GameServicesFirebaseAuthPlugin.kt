@@ -1,5 +1,6 @@
 package io.revoltgames.game_services_firebase_auth
 
+import android.content.Context
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -10,10 +11,12 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 class GameServicesFirebaseAuthPlugin : FlutterPlugin, ActivityAware {
     private var flutterPluginBinding: FlutterPluginBinding? = null
     private var methodCallHandler: MethodCallHandlerImpl? = null
+    lateinit var context: Context
 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPluginBinding) {
         this.flutterPluginBinding = flutterPluginBinding
+        methodCallHandler?.setContext(flutterPluginBinding.applicationContext)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPluginBinding) {

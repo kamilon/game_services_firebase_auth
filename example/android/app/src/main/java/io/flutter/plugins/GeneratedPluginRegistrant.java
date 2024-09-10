@@ -21,19 +21,14 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin firebase_auth, io.flutter.plugins.firebase.auth.FlutterFirebaseAuthPlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new com.chunkytofustudios.firebase_auth_games_services.FirebaseAuthGamesServicesPlugin());
-    } catch (Exception e) {
-      Log.e(TAG, "Error registering plugin firebase_auth_games_services, com.chunkytofustudios.firebase_auth_games_services.FirebaseAuthGamesServicesPlugin", e);
-    }
-    try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.firebase.core.FlutterFirebaseCorePlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin firebase_core, io.flutter.plugins.firebase.core.FlutterFirebaseCorePlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new dev.flutter.plugins.integration_test.IntegrationTestPlugin());
+      flutterEngine.getPlugins().add(new io.revoltgames.game_services_firebase_auth.GameServicesFirebaseAuthPlugin());
     } catch (Exception e) {
-      Log.e(TAG, "Error registering plugin integration_test, dev.flutter.plugins.integration_test.IntegrationTestPlugin", e);
+      Log.e(TAG, "Error registering plugin game_services_firebase_auth, io.revoltgames.game_services_firebase_auth.GameServicesFirebaseAuthPlugin", e);
     }
   }
 }
