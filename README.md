@@ -16,8 +16,7 @@ To install the package, add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  
-  your_package_name: ^latest_version
+  game_services_firebase_auth: ^latest_version
 ```
 
 Then run:
@@ -37,6 +36,34 @@ Android, which can be a bit tricky and may lead to ambiguous errors if not set u
 3. Ensure to activate the Game Center Authentication method in the Firebase Console.
 
 ![Firebase Activate Game Center](./blob/firebase_activate_game_center.png)
+
+### 🤖 Android
+1. Make sure you have well configure Firebase in your Flutter project. [(Doc here)](https://firebase.google.com/docs/flutter/setup?platform=android)
+2. Get your project SHA-1 keys in your /android folder
+```shell
+./gradlew signingReport
+```
+3. Add your SHA-1 keys in your Firebase Console
+
+![Firebase Android SHA-1](./blob/firebase_android_sha1.png)
+
+4. Enable Google Play Games as a sign-in provider:
+Find your project's web server client ID and client secret. The web server client ID identifies your Firebase project to the Google Play auth servers.
+
+To find these values:
+
+Open your Firebase project in the Google APIs console credentials page.
+In the OAuth 2.0 client IDs section, open the Web client (auto created by Google Service) details page. This page lists your web server client ID and secret.
+Then, in the Firebase console, open the Authentication section.
+
+On the Sign in method tab, enable the Play Games sign-in provider. You will need to specify your project's web server client ID and client secret, which you got from the APIs console.
+
+
+
+
+
+
+
 
 ## Usage
 
