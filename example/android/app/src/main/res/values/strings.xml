@@ -1,6 +1,5 @@
 <!-- res/values/strings.xml -->
 <resources>
-    <string name="game_services_project_id" translatable="false">498610759562</string>
-    <string name="game_services_oauth_2_web_client_id" translatable="false">
-        498610759562-3rcfn7a4qc8mbkc38dkrq1d7udqcj8fn.apps.googleusercontent.com</string>
+    <string name="game_services_project_id" translatable="false">XXXX</string>
+    <string name="game_services_oauth_2_web_client_id" translatable="false">XXX</string>
 </resources>
