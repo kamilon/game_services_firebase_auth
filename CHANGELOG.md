@@ -1,3 +1,9 @@
+## 2.0.0
+- Complete refactor and codebase cleanup for better maintainability and performance.
+- Updated the Flutter package dependency `firebase_auth` to version `^5.2.0` for improved compatibility and security updates.
+- Revised and cleaned up the `README` to reflect the latest changes and provide clearer setup instructions.
+- Upgraded Android implementation to use `com.google.android.gms:play-services-games-v2+` for enhanced support of Play Games Services v2.
+
 ## 1.1.0
 * Update Flutter package firebase_core to ^3.1.0
 * Update Flutter package firebase_auth to ^5.1.0
