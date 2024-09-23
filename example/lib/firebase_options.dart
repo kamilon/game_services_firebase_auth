@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '498610759562',
     projectId: 'game-services-firebase-auth-ex',
     storageBucket: 'game-services-firebase-auth-ex.appspot.com',
+    androidClientId: '498610759562-56j59hq9flt5t7um8fmv63il89klqdnv.apps.googleusercontent.com',
     iosBundleId: 'io.revoltgames.gameservicesfirebaseauth',
   );
+
 }

@@ -1,120 +1,128 @@
+
 # 🎮 Game Services FirebaseAuth Plugin
 
-A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS and Play Games on
-Android.
+A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS and Play Games on Android.
 
 ## Features
 
-- **Cross-Platform Game Services**: Supports Firebase Authentication with GameCenter on iOS and Play
-  Games on Android.
-- **Easy Integration**: Minimal code required to sign in, link accounts, and manage authentication
-  with game services.
+- **Cross-Platform Support**: Authenticate users via GameCenter (iOS) and Play Games (Android) using Firebase.
+- **Simple Integration**: Minimal setup to sign in, link accounts, and manage authentication.
+
+## Requirements
+
+- **Firebase Auth**
 
 ## Installation
 
-To install the package, add the following to your `pubspec.yaml`:
+To install the plugin, add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   game_services_firebase_auth: ^latest_version
 ```
 
-Then run:
+Then, run the following command to fetch the dependency:
 
 ```bash
 flutter pub get
 ```
 
-Please follow the instructions carefully to set up your project for iOS and Android, especially for
-Android, which can be a bit tricky and may lead to ambiguous errors if not set up correctly.
+Carefully follow the setup instructions for both iOS and Android to avoid configuration errors.
 
+### 🍏 iOS Setup
 
-### 🍏 iOS
-
-1. Make sure you have well configure Firebase in your Flutter project. [(Doc here)](https://firebase.google.com/docs/flutter/setup?platform=ios)
-2. Open your project in Xcode. In the Signing & Capabilities tab, add the ‘Game Center’ capability [(Doc here)](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center/)
-3. Ensure to activate the Game Center Authentication method in the Firebase Console.
+1. Ensure Firebase is properly configured for your iOS project. Follow the [Firebase setup guide](https://firebase.google.com/docs/flutter/setup?platform=ios).
+2. Open your project in Xcode, navigate to the Signing & Capabilities tab, and add the **Game Center** capability. [Learn more](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center/).
+3. Enable Game Center authentication in the Firebase Console.
 
 ![Firebase Activate Game Center](./blob/firebase_activate_game_center.png)
 
-### 🤖 Android
-1. Make sure you have well configure Firebase in your Flutter project. [(Doc here)](https://firebase.google.com/docs/flutter/setup?platform=android)
-2. Get your project SHA-1 keys in your /android folder
-```shell
+### 🤖 Android Setup
+
+Refer to the [official documentation](https://developers.google.com/games/services/console/enabling) for enabling Play Games services.
+
+1. Make sure Firebase is configured correctly for Android. [Setup instructions here](https://firebase.google.com/docs/flutter/setup?platform=android).
+2. Retrieve your project’s SHA-1 keys using the command below:
+
+```bash
 ./gradlew signingReport
 ```
-3. Add your SHA-1 keys in your Firebase Console
+
+3. Add the SHA-1 keys to your Firebase Console, including debug and production keys.
 
 ![Firebase Android SHA-1](./blob/firebase_android_sha1.png)
 
-4. Enable Google Play Games as a sign-in provider:
-Find your project's web server client ID and client secret. The web server client ID identifies your Firebase project to the Google Play auth servers.
+4. Create a Web OAuth client ID in the Google Cloud Console and save the credentials (ID & secret).
+5. Enable Google Play Games as a sign-in provider in the Firebase Console. Use the OAuth credentials created in the previous step.
 
-To find these values:
+![Firebase Sign-In Method](./blob/firebase_android_sign_in_method.png)
 
-Open your Firebase project in the Google APIs console credentials page.
-In the OAuth 2.0 client IDs section, open the Web client (auto created by Google Service) details page. This page lists your web server client ID and secret.
-Then, in the Firebase console, open the Authentication section.
+6. For each SHA-1 key (e.g., one for debug and one for Play Console), create a corresponding OAuth Android client ID in Google Cloud Console.
 
-On the Sign in method tab, enable the Play Games sign-in provider. You will need to specify your project's web server client ID and client secret, which you got from the APIs console.
+![GCP OAuth Keys](./blob/gcp_oauth_keys.png)
 
+7. Activate Play Games on your app in the Google Play Console and fill in the required fields.
+8. Create Play Services credentials for each key (from step 6).
 
+![Google Play Keys](./blob/google_play_keys.png)
 
+9. Add the following metadata to your `AndroidManifest.xml`:
 
+```xml
+<meta-data
+    android:name="com.google.android.gms.games.APP_ID"
+    android:value="@string/game_services_project_id" />
 
+<meta-data
+    android:name="io.revoltgames.game_services_firebase_auth.OAUTH_2_WEB_CLIENT_ID"
+    android:value="@string/game_services_oauth_2_web_client_id" />
+```
 
+10. In your `res/values/strings.xml`, add the following values (replace `XXXXXX` with your actual values):
 
+```xml
+<resources>
+    <string name="game_services_project_id" translatable="false">XXXXXX</string>
+    <string name="game_services_oauth_2_web_client_id" translatable="false">XXXXXX</string>
+</resources>
+```
+
+11. Finally, run the Firebase configuration command to ensure everything is set up:
+
+```bash
+flutterfire configure
+```
 
 ## Usage
 
 ### Sign In with Game Services
 
 ```dart
-await
-FirebaseAuth.instance.signInWithGamesServices
-();
+await FirebaseAuth.instance.signInWithGamesServices();
 ```
 
-### Check if Current User is Linked with Game Services
+### Check if User is Linked with Game Services
 
 ```dart
-firebaseUser.isLinkedWithGamesServices
-();
+bool isLinked = firebaseUser.isLinkedWithGamesServices();
 ```
 
-### Link Firebase User with Game Services
+### Link User with Game Services
 
 ```dart
-await
-firebaseUser.linkWithGamesServices
-();
+await firebaseUser.linkWithGamesServices();
 ```
 
-### Force Sign In with Game Services if Account Already Linked
+### Force Sign-In if Account Already Linked
 
 ```dart
-await
-firebaseUser.linkWithGamesServices
-(
-forceSignInWithGameServiceIfCredentialAlreadyUsed
-:
-true
-);
+await firebaseUser.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
 ```
-
-## Requirements
-
-- **Firebase Core**
-- **Firebase Auth**
 
 ## Contributing
 
-Contributions are welcome! Please follow the [contribution guidelines](CONTRIBUTING.md) and basic
-open-source practices.
+Contributions are welcome! Please check out the [contributing guidelines](CONTRIBUTING.md) for more details.
 
 ## License
 
-This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for more
-details.
-
-
+This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for more information.
