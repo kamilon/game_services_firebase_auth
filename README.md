@@ -8,10 +8,6 @@ A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS
 - **Cross-Platform Support**: Authenticate users via GameCenter (iOS) and Play Games (Android) using Firebase.
 - **Simple Integration**: Minimal setup to sign in, link accounts, and manage authentication.
 
-## Requirements
-
-- **Firebase Auth**
-
 ## Installation
 
 To install the plugin, add the following to your `pubspec.yaml`:
@@ -118,6 +114,23 @@ await firebaseUser.linkWithGamesServices();
 ```dart
 await firebaseUser.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
 ```
+
+## Requirements
+
+- **Firebase Core**
+- **Firebase Auth**
+
+## Troubleshooting
+
+### iOS
+
+#### Error: Lexical or Preprocessor Issue (Xcode): Include of non-modular header inside framework module 'firebase_auth.FLTIdTokenChannelStreamHandle'
+
+To resolve this issue:
+
+1. Open your project in Xcode.
+2. Navigate to **Build Settings** under your target.
+3. Set **Allow Non-modular Includes in Framework Modules** to **YES**.
 
 ## Contributing
 
