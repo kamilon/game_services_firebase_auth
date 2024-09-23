@@ -1,6 +1,6 @@
 name: game_services_firebase_auth
 description: A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS and Play Games on Android.
-version: 2.0.0
+version: 2.0.1
 homepage: https://www.revoltgames.io/
 repository: https://github.com/revoltgames/game_services_firebase_auth.git
 

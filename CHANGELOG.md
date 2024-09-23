@@ -1,3 +1,6 @@
+## 2.0.1
+- Update README.md images
+
 ## 2.0.0
 - Complete refactor and codebase cleanup for better maintainability and performance.
 - Updated the Flutter package dependency `firebase_auth` to version `^5.2.0` for improved compatibility and security updates.

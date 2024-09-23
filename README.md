@@ -35,7 +35,7 @@ Carefully follow the setup instructions for both iOS and Android to avoid config
 2. Open your project in Xcode, navigate to the Signing & Capabilities tab, and add the **Game Center** capability. [Learn more](https://developer.apple.com/documentation/gamekit/enabling_and_configuring_game_center/).
 3. Enable Game Center authentication in the Firebase Console.
 
-![Firebase Activate Game Center](./blob/firebase_activate_game_center.png)
+![Firebase Activate Game Center](https://raw.githubusercontent.com/revoltgames/game_services_firebase_auth/refs/heads/main/blob/firebase_activate_game_center.png)
 
 ### 🤖 Android Setup
 
@@ -50,21 +50,21 @@ Refer to the [official documentation](https://developers.google.com/games/servic
 
 3. Add the SHA-1 keys to your Firebase Console, including debug and production keys.
 
-![Firebase Android SHA-1](./blob/firebase_android_sha1.png)
+![Firebase Android SHA-1](https://raw.githubusercontent.com/revoltgames/game_services_firebase_auth/refs/heads/main/blob/firebase_android_sha1.png)
 
 4. Create a Web OAuth client ID in the Google Cloud Console and save the credentials (ID & secret).
 5. Enable Google Play Games as a sign-in provider in the Firebase Console. Use the OAuth credentials created in the previous step.
 
-![Firebase Sign-In Method](./blob/firebase_android_sign_in_method.png)
+![Firebase Sign-In Method](https://raw.githubusercontent.com/revoltgames/game_services_firebase_auth/refs/heads/main/blob/firebase_android_sign_in_method.png)
 
 6. For each SHA-1 key (e.g., one for debug and one for Play Console), create a corresponding OAuth Android client ID in Google Cloud Console.
 
-![GCP OAuth Keys](./blob/gcp_oauth_keys.png)
+![GCP OAuth Keys](https://raw.githubusercontent.com/revoltgames/game_services_firebase_auth/refs/heads/main/blob/gcp_oauth_keys.png)
 
 7. Activate Play Games on your app in the Google Play Console and fill in the required fields.
 8. Create Play Services credentials for each key (from step 6).
 
-![Google Play Keys](./blob/google_play_keys.png)
+![Google Play Keys](https://raw.githubusercontent.com/revoltgames/game_services_firebase_auth/refs/heads/main/blob/google_play_keys.png)
 
 9. Add the following metadata to your `AndroidManifest.xml`:
 
