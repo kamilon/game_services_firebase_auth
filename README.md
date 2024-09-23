@@ -8,6 +8,10 @@ A Flutter plugin that simplifies Firebase Authentication using GameCenter on iOS
 - **Cross-Platform Support**: Authenticate users via GameCenter (iOS) and Play Games (Android) using Firebase.
 - **Simple Integration**: Minimal setup to sign in, link accounts, and manage authentication.
 
+## Requirements
+
+- **Firebase Auth**
+
 ## Installation
 
 To install the plugin, add the following to your `pubspec.yaml`:
@@ -114,11 +118,6 @@ await firebaseUser.linkWithGamesServices();
 ```dart
 await firebaseUser.linkWithGamesServices(forceSignInWithGameServiceIfCredentialAlreadyUsed: true);
 ```
-
-## Requirements
-
-- **Firebase Core**
-- **Firebase Auth**
 
 ## Troubleshooting
 
