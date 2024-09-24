@@ -17,24 +17,28 @@ class GameServicesCredentialsUtils {
   /// Returns an [OAuthCredential] that can be used with Firebase for user authentication.
   static Future<OAuthCredential> getPlayGamesCredential() async {
     // Attempt to sign in with Play Games.
-    final bool success = await GameServicesFirebaseAuth().signInWithGameService();
+    final bool success =
+        await GameServicesFirebaseAuth().signInWithGameService();
 
     // If sign-in fails, throw an exception.
     if (!success) {
       throw GameServicesFirebaseAuthException(
         code: GameServicesFirebaseExceptionCode.notSignedIntoGamesServices,
-        message: 'Failed to sign into Play Games. Please check your Play Games settings and try again.',
+        message:
+            'Failed to sign into Play Games. Please check your Play Games settings and try again.',
       );
     }
 
     // Retrieve the authentication code from Play Games.
-    final String? authCode = await GameServicesFirebaseAuth().getAndroidServerAuthCode();
+    final String? authCode =
+        await GameServicesFirebaseAuth().getAndroidServerAuthCode();
 
     // If the auth code is null, throw an exception.
     if (authCode == null) {
       throw GameServicesFirebaseAuthException(
         code: GameServicesFirebaseExceptionCode.notSignedIntoGamesServices,
-        message: 'Failed to retrieve auth code from Play Games. Please check your Play Games settings and try again.',
+        message:
+            'Failed to retrieve auth code from Play Games. Please check your Play Games settings and try again.',
       );
     }
 
@@ -53,7 +57,8 @@ class GameServicesCredentialsUtils {
   /// Returns an [OAuthCredential] that can be used with Firebase to authenticate the user.
   static Future<OAuthCredential> getGameCenterCredential() async {
     // Check if the user is already signed into Game Center.
-    final bool alreadySignedIn = await GameServicesFirebaseAuth().isAlreadySignInWithGameService();
+    final bool alreadySignedIn =
+        await GameServicesFirebaseAuth().isAlreadySignInWithGameService();
 
     if (alreadySignedIn) {
       // Return the Game Center OAuth credential if already signed in.
@@ -61,13 +66,15 @@ class GameServicesCredentialsUtils {
     }
 
     // Attempt to sign in with Game Center.
-    final bool signInSuccess = await GameServicesFirebaseAuth().signInWithGameService();
+    final bool signInSuccess =
+        await GameServicesFirebaseAuth().signInWithGameService();
 
     // If sign-in fails, throw an exception.
     if (!signInSuccess) {
       throw GameServicesFirebaseAuthException(
         code: GameServicesFirebaseExceptionCode.notSignedIntoGamesServices,
-        message: 'Failed to sign into Game Center. Please check your Game Center settings and try again.',
+        message:
+            'Failed to sign into Game Center. Please check your Game Center settings and try again.',
       );
     }
 

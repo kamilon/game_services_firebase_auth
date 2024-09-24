@@ -10,7 +10,8 @@ import 'logging.dart';
 /// and checking if the user is already authenticated via those services.
 class GameServicesFirebaseAuth {
   // Singleton instance of GameServicesFirebaseAuth.
-  static final GameServicesFirebaseAuth _instance = GameServicesFirebaseAuth._internal();
+  static final GameServicesFirebaseAuth _instance =
+      GameServicesFirebaseAuth._internal();
 
   // Private internal constructor to prevent external instantiation.
   GameServicesFirebaseAuth._internal();
@@ -66,7 +67,8 @@ class GameServicesFirebaseAuth {
   /// bool isSignedIn = await GameServicesFirebaseAuth().isAlreadySignInWithGameService();
   /// ```
   Future<bool> isAlreadySignInWithGameService() {
-    return GameServicesFirebaseAuthPlatform.instance.isAlreadySignInWithGameService();
+    return GameServicesFirebaseAuthPlatform.instance
+        .isAlreadySignInWithGameService();
   }
 
   /// Retrieves the Android server authentication code for Play Games.

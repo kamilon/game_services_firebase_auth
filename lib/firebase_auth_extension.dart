@@ -29,17 +29,20 @@ extension FirebaseAuthExtension on FirebaseAuth {
   Future<UserCredential> signInWithGamesServices() async {
     // Handle Android platform: Fetch Play Games credentials and sign in with Firebase.
     if (Platform.isAndroid) {
-      final playGamesCredential = await GameServicesCredentialsUtils.getPlayGamesCredential();
+      final playGamesCredential =
+          await GameServicesCredentialsUtils.getPlayGamesCredential();
       return signInWithCredential(playGamesCredential);
     }
 
     // Handle iOS platform: Fetch Game Center credentials and sign in with Firebase.
     if (Platform.isIOS) {
-      final gameCenterCredential = await GameServicesCredentialsUtils.getGameCenterCredential();
+      final gameCenterCredential =
+          await GameServicesCredentialsUtils.getGameCenterCredential();
       return signInWithCredential(gameCenterCredential);
     }
 
     // For unsupported platforms, throw an error.
-    throw UnimplementedError('This platform is not supported. Only Android and iOS are supported.');
+    throw UnimplementedError(
+        'This platform is not supported. Only Android and iOS are supported.');
   }
 }

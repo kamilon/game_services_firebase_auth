@@ -9,7 +9,8 @@ import 'game_services_firebase_auth_platform_interface.dart';
 ///
 /// This class provides the logic to interact with native game services, such as
 /// Play Games on Android and Game Center on iOS, by invoking method channel calls.
-class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlatform {
+class GameServicesFirebaseAuthMethodChannel
+    extends GameServicesFirebaseAuthPlatform {
   // Logger instance for logging important information, warnings, or errors.
   static final Logger _log = Logger('GameServiceFirebaseAuth');
 
@@ -28,7 +29,9 @@ class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlat
     final bool? success;
     try {
       // Invoke the native method for signing in with the game service.
-      success = await methodChannel.invokeMethod<bool>('signInWithGameService') ?? false;
+      success =
+          await methodChannel.invokeMethod<bool>('signInWithGameService') ??
+              false;
     } on PlatformException catch (e) {
       // Log the error if the platform throws an exception.
       _log.severe('Failed to sign in with Game Service: ${e.message}');
@@ -49,10 +52,13 @@ class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlat
     final bool result;
     try {
       // Invoke the native method to check if the user is already signed in.
-      result = await methodChannel.invokeMethod<bool>('isAlreadySignInWithGameService') ?? false;
+      result = await methodChannel
+              .invokeMethod<bool>('isAlreadySignInWithGameService') ??
+          false;
     } on PlatformException catch (e) {
       // Log the error if the platform throws an exception.
-      _log.severe('Failed to check if user is already signed in with Game Service: ${e.message}');
+      _log.severe(
+          'Failed to check if user is already signed in with Game Service: ${e.message}');
       return false;
     }
     _log.fine('Checked Game Service sign-in status successfully');
@@ -70,7 +76,8 @@ class GameServicesFirebaseAuthMethodChannel extends GameServicesFirebaseAuthPlat
     final String? authCode;
     try {
       // Invoke the native method to get the Android server auth code.
-      authCode = await methodChannel.invokeMethod<String>('getAndroidServerAuthCode');
+      authCode =
+          await methodChannel.invokeMethod<String>('getAndroidServerAuthCode');
     } on PlatformException catch (e) {
       // Log the error if the platform throws an exception.
       _log.severe('Failed to get Android server auth code: ${e.message}');

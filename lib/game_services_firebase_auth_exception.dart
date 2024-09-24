@@ -31,7 +31,8 @@ class GameServicesFirebaseAuthException implements Exception {
   ///
   /// The [code] is required and should come from the [GameServicesFirebaseExceptionCode] enum.
   /// The [message] should provide a clear explanation of the error.
-  GameServicesFirebaseAuthException({required this.code, required this.message, this.details});
+  GameServicesFirebaseAuthException(
+      {required this.code, required this.message, this.details});
 
   /// Returns a string representation of the exception, which includes the error
   /// code, the message, and any additional details provided.

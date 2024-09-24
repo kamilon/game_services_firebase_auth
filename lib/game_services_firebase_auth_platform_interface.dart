@@ -18,7 +18,8 @@ abstract class GameServicesFirebaseAuthPlatform extends PlatformInterface {
 
   // The default instance of the platform interface, currently set to use the
   // method channel implementation to communicate with native code.
-  static GameServicesFirebaseAuthPlatform _instance = GameServicesFirebaseAuthMethodChannel();
+  static GameServicesFirebaseAuthPlatform _instance =
+      GameServicesFirebaseAuthMethodChannel();
 
   /// Provides access to the current instance of the platform interface.
   ///
@@ -51,7 +52,8 @@ abstract class GameServicesFirebaseAuthPlatform extends PlatformInterface {
   ///
   /// Returns a [Future] that completes with a [bool] indicating whether the user is signed in (`true`) or not (`false`).
   Future<bool> isAlreadySignInWithGameService() {
-    throw UnimplementedError('isAlreadySignInWithGameService has not been implemented.');
+    throw UnimplementedError(
+        'isAlreadySignInWithGameService has not been implemented.');
   }
 
   /// Retrieves the Android server authentication code (for Play Games).
@@ -62,6 +64,7 @@ abstract class GameServicesFirebaseAuthPlatform extends PlatformInterface {
   /// Returns a [Future] that completes with a [String?] representing the server authentication code,
   /// or `null` if the authentication code could not be retrieved.
   Future<String?> getAndroidServerAuthCode() {
-    throw UnimplementedError('getAndroidServerAuthCode has not been implemented.');
+    throw UnimplementedError(
+        'getAndroidServerAuthCode has not been implemented.');
   }
 }

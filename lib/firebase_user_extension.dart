@@ -20,25 +20,30 @@ extension FirebaseUserExtension on User {
   /// - [UnimplementedError] for unsupported platforms (non-Android, non-iOS).
   /// - [FirebaseAuthGamesServicesException] if authentication with game services fails.
   /// - [FirebaseAuthException] if linking with Firebase fails (e.g., invalid credentials, network issues).
-  Future<UserCredential> linkWithGamesServices({bool forceSignInWithGameServiceIfCredentialAlreadyUsed = false}) async {
+  Future<UserCredential> linkWithGamesServices(
+      {bool forceSignInWithGameServiceIfCredentialAlreadyUsed = false}) async {
     try {
       // Handle linking on Android (Play Games).
       if (Platform.isAndroid) {
-        final playGamesCredential = await GameServicesCredentialsUtils.getPlayGamesCredential();
+        final playGamesCredential =
+            await GameServicesCredentialsUtils.getPlayGamesCredential();
         return await linkWithCredential(playGamesCredential);
       }
 
       // Handle linking on iOS (Game Center).
       if (Platform.isIOS) {
-        final gameCenterCredential = await GameServicesCredentialsUtils.getGameCenterCredential();
+        final gameCenterCredential =
+            await GameServicesCredentialsUtils.getGameCenterCredential();
         return await linkWithCredential(gameCenterCredential);
       }
 
       // Unsupported platform error.
-      throw UnimplementedError('This platform is not supported. Only Android and iOS are supported.');
+      throw UnimplementedError(
+          'This platform is not supported. Only Android and iOS are supported.');
     } on FirebaseAuthException catch (e) {
       // Handle the case where credentials are already linked with another account.
-      if (forceSignInWithGameServiceIfCredentialAlreadyUsed && e.code == 'credential-already-in-use') {
+      if (forceSignInWithGameServiceIfCredentialAlreadyUsed &&
+          e.code == 'credential-already-in-use') {
         await FirebaseAuth.instance.signOut();
         return FirebaseAuth.instance.signInWithGamesServices();
       }
@@ -55,12 +60,14 @@ extension FirebaseUserExtension on User {
   bool isLinkedWithGamesServices() {
     // Check if Play Games is linked on Android.
     if (Platform.isAndroid) {
-      return providerData.any((UserInfo info) => info.providerId == PlayGamesAuthProvider.PROVIDER_ID);
+      return providerData.any((UserInfo info) =>
+          info.providerId == PlayGamesAuthProvider.PROVIDER_ID);
     }
 
     // Check if Game Center is linked on iOS.
     if (Platform.isIOS) {
-      return providerData.any((UserInfo info) => info.providerId == GameCenterAuthProvider.PROVIDER_ID);
+      return providerData.any((UserInfo info) =>
+          info.providerId == GameCenterAuthProvider.PROVIDER_ID);
     }
 
     throw UnimplementedError('This platform is not supported.');
@@ -81,7 +88,8 @@ extension FirebaseUserExtension on User {
       if (Platform.isAndroid) {
         return providerData
             .firstWhere(
-              (UserInfo info) => info.providerId == PlayGamesAuthProvider.PROVIDER_ID,
+              (UserInfo info) =>
+                  info.providerId == PlayGamesAuthProvider.PROVIDER_ID,
             )
             .uid;
       }
@@ -90,7 +98,8 @@ extension FirebaseUserExtension on User {
       if (Platform.isIOS) {
         return providerData
             .firstWhere(
-              (UserInfo info) => info.providerId == GameCenterAuthProvider.PROVIDER_ID,
+              (UserInfo info) =>
+                  info.providerId == GameCenterAuthProvider.PROVIDER_ID,
             )
             .uid;
       }
