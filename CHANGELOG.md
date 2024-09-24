@@ -1,3 +1,6 @@
+## 2.0.3
+- Fix the iOS log when the user successfully authenticates with Game Services
+
 ## 2.0.2
 - Fix the pub.dev score by formatting the code
 
