@@ -99,7 +99,7 @@ public class SwiftGameServicesFirebaseAuthPlugin: NSObject, FlutterPlugin {
             }
             
             // If the player is successfully authenticated.
-            NSLog("[Game Services] - signInWithGameService -  ")
+            NSLog("[Game Services] - signInWithGameService - User successfully authenticated")
             result(true) // Send success back to Flutter.
         }
     }
