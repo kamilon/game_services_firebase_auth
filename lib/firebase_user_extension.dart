@@ -31,7 +31,7 @@ extension FirebaseUserExtension on User {
       }
 
       // Handle linking on iOS (Game Center).
-      if (Platform.isIOS) {
+      if (Platform.isIOS || Platform.isMacOS) {
         final gameCenterCredential =
             await GameServicesCredentialsUtils.getGameCenterCredential();
         return await linkWithCredential(gameCenterCredential);
@@ -65,7 +65,7 @@ extension FirebaseUserExtension on User {
     }
 
     // Check if Game Center is linked on iOS.
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isMacOS) {
       return providerData.any((UserInfo info) =>
           info.providerId == GameCenterAuthProvider.PROVIDER_ID);
     }
@@ -95,7 +95,7 @@ extension FirebaseUserExtension on User {
       }
 
       // Return Game Center ID on iOS.
-      if (Platform.isIOS) {
+      if (Platform.isIOS || Platform.isMacOS) {
         return providerData
             .firstWhere(
               (UserInfo info) =>

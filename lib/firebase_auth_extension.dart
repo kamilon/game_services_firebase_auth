@@ -35,7 +35,7 @@ extension FirebaseAuthExtension on FirebaseAuth {
     }
 
     // Handle iOS platform: Fetch Game Center credentials and sign in with Firebase.
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isMacOS) {
       final gameCenterCredential =
           await GameServicesCredentialsUtils.getGameCenterCredential();
       return signInWithCredential(gameCenterCredential);
