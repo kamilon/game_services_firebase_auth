@@ -17,8 +17,7 @@ A new flutter plugin project.
   s.dependency 'Flutter'
   s.dependency 'firebase_auth'
   s.static_framework = true
-  s.ios.deployment_target = '10.0'
-  s.osx.deployment_target = '10.0'
+  s.platforms = { :ios => "10.0", :osx => "10.8" }
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
