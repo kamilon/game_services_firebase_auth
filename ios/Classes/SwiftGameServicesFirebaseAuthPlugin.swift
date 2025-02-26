@@ -50,7 +50,7 @@ public class SwiftGameServicesFirebaseAuthPlugin: NSObject, FlutterPlugin {
     ///
     /// - Parameter result: A FlutterResult callback that sends `true` if the user is signed in,
     ///   or `false` if not signed in.
-    @available(iOS 13.0, *)
+    @available(iOS 13.0, macOS 10.15, *)
     func isAlreadySignInWithGameService(result: @escaping FlutterResult) {
         // GKLocalPlayer.local.isAuthenticated returns `true` if the user is signed into Game Center.
         let playerSignedIn = GKLocalPlayer.local.isAuthenticated
@@ -65,7 +65,7 @@ public class SwiftGameServicesFirebaseAuthPlugin: NSObject, FlutterPlugin {
     ///
     /// - Parameter result: A FlutterResult callback that sends `true` if sign-in is successful,
     ///   or `false` if the sign-in fails. It also sends a `FlutterError` if an error occurs.
-    @available(iOS 13.0, *)
+    @available(iOS 13.0, macOS 10.15, *)
     func signInWithGameService(result: @escaping FlutterResult) {
         // Log the start of the Game Center sign-in process.
         NSLog("[Game Services] - signInWithGameService - Login requested")
