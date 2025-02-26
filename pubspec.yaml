@@ -31,3 +31,5 @@ flutter:
         pluginClass: GameServicesFirebaseAuthPlugin
       ios:
         pluginClass: GameServicesFirebaseAuthPlugin
+      macos:
+        pluginClass: GameServicesFirebaseAuthPlugin
