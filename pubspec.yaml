@@ -31,5 +31,7 @@ flutter:
         pluginClass: GameServicesFirebaseAuthPlugin
       ios:
         pluginClass: GameServicesFirebaseAuthPlugin
+        sharedDarwinSource: true
       macos:
         pluginClass: GameServicesFirebaseAuthPlugin
+        sharedDarwinSource: true
