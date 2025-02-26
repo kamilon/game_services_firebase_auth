@@ -62,7 +62,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
-  - game_services_firebase_auth (from `.symlinks/plugins/game_services_firebase_auth/ios`)
+  - game_services_firebase_auth (from `.symlinks/plugins/game_services_firebase_auth/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -85,12 +85,12 @@ EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   game_services_firebase_auth:
-    :path: ".symlinks/plugins/game_services_firebase_auth/ios"
+    :path: ".symlinks/plugins/game_services_firebase_auth/darwin"
 
 SPEC CHECKSUMS:
   Firebase: 9f574c08c2396885b5e7e100ed4293d956218af9
-  firebase_auth: f27287630c4d9e2c3c63e64d9240822ad6b07e5b
-  firebase_core: 2ec6b789859c7c24766344ec71fdf78639402d56
+  firebase_auth: d3bf3913c22ce04336f7bfabcb7a4cac9b34b4f7
+  firebase_core: 4ac256c293bc0c17f9614fbf1fce7dca5fc6236a
   FirebaseAppCheckInterop: e59b52f2c0e188e6ba77b9e3f6acead2117f2abf
   FirebaseAuth: d5cf28be74d7e82257f6a3f717509eff70d3cf4a
   FirebaseAuthInterop: 49e8faefaf254ce578e278a84a8fe0aebe23b546
@@ -98,11 +98,11 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: aa5c9779c2d0d39d83f1ceb3fdbafe80c4feecfa
   FirebaseCoreInternal: adefedc9a88dbe393c4884640a73ec9e8e790f8c
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  game_services_firebase_auth: 032b5d767857ea9e46bd05a44274520999d08102
+  game_services_firebase_auth: a194ce01493017f998f9da06a821375416a8b632
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
 
 PODFILE CHECKSUM: c4c93c5f6502fe2754f48404d3594bf779584011
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
