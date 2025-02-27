@@ -1,5 +1,10 @@
+#if os(iOS)
 import Flutter
 import UIKit
+#else
+import FlutterMacOS
+import Cocoa
+#endif
 import GameKit
 import os
 import FirebaseAuth
