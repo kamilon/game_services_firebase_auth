@@ -24,5 +24,5 @@ A new flutter plugin project.
   s.swift_version = '5.0'
   
   s.ios.deployment_target = '10.0'
-  s.osx.deployment_target = '10.8'
+  s.osx.deployment_target = '11.5'
 end
