@@ -16,9 +16,15 @@ public class SwiftGameServicesFirebaseAuthPlugin: NSObject, FlutterPlugin {
     
     // Provides the current view controller to present Game Center sign-in UI.
     // This is required because GameKit needs to present the authentication UI in some cases.
+    #if os(iOS)
     var viewController: UIViewController {
         return UIApplication.shared.windows.first!.rootViewController!
     }
+    #else
+    var viewController: NSViewController {
+        return NSApplication.shared.windows.first!.contentViewController!
+    }
+    #endif
     
     /// Registers the plugin with the Flutter plugin registrar.
     ///
