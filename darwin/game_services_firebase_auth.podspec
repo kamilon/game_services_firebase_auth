@@ -14,7 +14,8 @@ A new flutter plugin project.
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
-  s.dependency 'Flutter'
+  s.ios.dependency 'Flutter'
+  s.osx.dependency 'FlutterMacOS'
   s.dependency 'firebase_auth'
   s.static_framework = true
 
@@ -23,5 +24,5 @@ A new flutter plugin project.
   s.swift_version = '5.0'
   
   s.ios.deployment_target = '10.0'
-  s.osx.deployment_target = '11.0'
+  s.osx.deployment_target = '10.8'
 end
